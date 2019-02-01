@@ -12,11 +12,15 @@ import UIKit
 class LockControl: UIControl {
     
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        
+        sendActions(for: [.valueChanged])
         return true
     }
     
     override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        sendActions(for: [.valueChanged])
+        
+        
+        
         
         return true
     }

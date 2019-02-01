@@ -93,6 +93,8 @@ class ViewController: UIViewController {
         
         scrollView.layer.cornerRadius = 25
         scrollView.backgroundColor = .gray
+        
+        scrollView.addTarget(self, action: #selector(scrolViewAction), for: .valueChanged)
     }
     
     private func drawScrollingBallView() {
@@ -107,6 +109,20 @@ class ViewController: UIViewController {
         
         scrollingBallView.layer.cornerRadius = 25
         scrollingBallView.backgroundColor = .black
+    }
+    
+    // MARK: - Scroll view action
+    
+    @objc func scrolViewAction(sender: LockControl) {
+        print("Values changed")
+    }
+    
+    private func updateScrollingBallViewLocation() {
+        
+    }
+    
+    private func toggleLockImageViewImage() {
+        
     }
 }
 
