@@ -9,12 +9,64 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    // MARK: - Super class lifecycle functions
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        drawMainView()
+        drawLockImageView()
+        drawScrollView()
+        drawScrollingBallView()
     }
+    
+    // MARK: - Properties
+    
+    var mainView: UIView {
+        let view = UIView()
+        return view
+    }
+    
+    var lockImageView: UIImageView {
+        let imageView = UIImageView()
+        return imageView
+    }
+    
+    var scrollView: UIView {
+        let view = LockControl()
+        return view
+    }
+    
+    var scrollingBallView: UIView {
+        let view = UIView()
+        return view
+    }
+    
+    // MARK: - Bar button action
 
-
+    @IBAction func resetTapped(_ sender: Any) {
+        
+        
+        
+    }
+    
+    // MARK: - Drawings
+    
+    private func drawMainView() {
+        
+    }
+    
+    private func drawLockImageView() {
+        
+    }
+    
+    private func drawScrollView() {
+        
+    }
+    
+    private func drawScrollingBallView() {
+        
+    }
 }
 
