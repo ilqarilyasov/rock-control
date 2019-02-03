@@ -34,21 +34,6 @@ class ViewController: UIViewController {
         drawScrollingBallView()
         view.backgroundColor = .lightGray
     }
-
-    
-    // MARK: - Bar button action
-
-    @objc func resetTapped(_ sender: Any) {
-        self.view.layoutIfNeeded()
-        UIView.animate(withDuration: 0.5) {
-            self.lockImageView.image = UIImage(named: "lock")
-            self.scrollingBallView.frame.origin.x = 10
-            self.resetButton.isEnabled = !self.resetButton.isEnabled
-            self.scrollView.isEnabled = true
-            self.view.backgroundColor = .lightGray
-            self.scrollView.value = false
-        }
-    }
     
     // MARK: - Drawings
     
@@ -110,11 +95,11 @@ class ViewController: UIViewController {
         scrollView.backgroundColor = .gray
         
         scrollView.addTarget(self, action: #selector(scrollViewAction),
-                             for: [.touchDown, .touchDragInside, .valueChanged])
+                             for: [.touchDown, .touchDragInside, .valueChanged, .touchDragOutside])
     }
     
     private func drawScrollingBallView() {
-        scrollingBallView = LockControl()
+        scrollingBallView = UIView()
         scrollView.addSubview(scrollingBallView)
         
         scrollingBallView.translatesAutoresizingMaskIntoConstraints = false
@@ -128,6 +113,20 @@ class ViewController: UIViewController {
         scrollView.scrollingBallView = scrollingBallView
     }
     
+    // MARK: - Bar button action
+    
+    @objc func resetTapped(_ sender: Any) {
+        self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 0.7) {
+            self.lockImageView.image = UIImage(named: "lock")
+            self.scrollingBallView.frame.origin.x = 10
+            self.resetButton.isEnabled = !self.resetButton.isEnabled
+            self.scrollView.isEnabled = true
+            self.view.backgroundColor = .lightGray
+            self.scrollView.value = false
+        }
+    }
+    
     // MARK: - Scroll view action
     
     @objc func scrollViewAction(sender: LockControl) {
@@ -136,10 +135,12 @@ class ViewController: UIViewController {
         sender.isEnabled = value ? false : true
     }
     
+    // MARK: - Helper methods
+    
     private func updateViews(value: Bool) {
         let imageName = value ? "unlock" : "lock"
         self.view.layoutIfNeeded()
-        UIView.animate(withDuration: 0.5) {
+        UIView.animate(withDuration: 0.7) {
             self.lockImageView.image = UIImage(named: imageName)
             self.resetButton.isEnabled = value ? true : false
             self.view.backgroundColor = .white

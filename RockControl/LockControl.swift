@@ -15,11 +15,24 @@ class LockControl: UIControl {
 
     var value: Bool?
     var scrollingBallView = UIView()
+    var scrollingBallFirstXPoint: CGFloat! {
+        return 10.0 + (scrollingBallView.bounds.width / 2)
+    }
+    var scrollingBallLastXPoint: CGFloat! {
+        return 300.0 - 10.0 - (scrollingBallView.bounds.width / 2)
+    }
     
     // MARK: - Touch handlers
     
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        sendActions(for: [.touchDown])
+        let touchPoint = touch.location(in: self)
+        
+        print("Touched \(touchPoint)")
+        
+        if bounds.contains(touchPoint) {
+            sendActions(for: [.touchDown])
+            moveScrollingBall(to: touchPoint, bound: bounds)
+        }
         return true
     }
     
@@ -28,7 +41,7 @@ class LockControl: UIControl {
         
         if bounds.contains(touchPoint) {
             sendActions(for: [.valueChanged, .touchDragInside])
-            updateBallFrame(touchPoint: touchPoint, bound: bounds)
+            moveScrollingBall(to: touchPoint, bound: bounds)
         } else {
             sendActions(for: [.touchDragOutside])
         }
@@ -43,9 +56,10 @@ class LockControl: UIControl {
         
         if bounds.contains(touchPoint) {
             sendActions(for: [.valueChanged, .touchDragInside])
-            moveScrollingBall(to: touchPoint, bound: bounds)
+            moveScrollingBallWhenTouchEnds(to: touchPoint, bound: bounds)
         } else {
             sendActions(for: [.touchDragOutside])
+            moveScrollingBallWhenTouchEnds(to: touchPoint, bound: bounds)
         }
     }
     
@@ -53,47 +67,43 @@ class LockControl: UIControl {
         sendActions(for: [.touchCancel])
     }
     
-    // MARK: - Update view
+    // MARK: - Update views position
     
-    private func updateBallFrame(touchPoint: CGPoint, bound: CGRect) {
-        
-        print(touchPoint.x)
-        print(bound.minX)
-        print(bound.maxX)
+    private func moveScrollingBall(to touchPoint: CGPoint, bound: CGRect) {
         
         if touchPoint.x <= (self.scrollingBallView.bounds.width / 2) {
             self.layoutIfNeeded()
             UIView.animate(withDuration: 0.5) {
                 self.scrollingBallView.center.x = touchPoint.x + (self.scrollingBallView.bounds.width / 2)
             }
-            value = false
         } else if touchPoint.x >= (bound.maxX * 0.8) {
             self.layoutIfNeeded()
             UIView.animate(withDuration: 0.5) {
                 self.scrollingBallView.center.x = touchPoint.x - (self.scrollingBallView.bounds.width / 2)
             }
-            value = true
         } else {
             self.layoutIfNeeded()
             UIView.animate(withDuration: 0.5) {
-                self.scrollingBallView.center.x = touchPoint.x
+                self.scrollingBallView.center.x = touchPoint.x  - (self.scrollingBallView.bounds.width / 2)
             }
-            value = false
         }
+        value = scrollingBallView.center.x >= (bound.maxX * 0.8) ? true : false
     }
     
-    private func moveScrollingBall(to touchPoint: CGPoint, bound: CGRect) {
+    private func moveScrollingBallWhenTouchEnds(to touchPoint: CGPoint, bound: CGRect) {
         
-        if touchPoint.x >= (bound.maxX * 0.8) {
+        if scrollingBallView.center.x >= (bound.maxX * 0.8) {
             self.layoutIfNeeded()
-            UIView.animate(withDuration: 0.5) {
-                self.scrollingBallView.center.x = bound.maxX - (self.scrollingBallView.bounds.width / 2)
+            UIView.animate(withDuration: 0.7) {
+                self.scrollingBallView.center.x = self.scrollingBallLastXPoint
             }
         } else {
             self.layoutIfNeeded()
-            UIView.animate(withDuration: 0.5) {
-                self.scrollingBallView.center.x = bound.minX + (self.scrollingBallView.bounds.width / 2)
+            UIView.animate(withDuration: 0.7) {
+                self.scrollingBallView.center.x = self.scrollingBallFirstXPoint
             }
         }
+        
+        value = scrollingBallView.center.x >= (bound.maxX * 0.8) ? true : false
     }
 }
