@@ -33,7 +33,7 @@ class ViewController: UIViewController {
         drawScrollView()
         drawScrollingBallView()
         view.backgroundColor = .lightGray
-        title = "Swipe to Unlock"
+        title = "Locked"
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
@@ -69,7 +69,6 @@ class ViewController: UIViewController {
         stackView.widthAnchor.constraint(equalToConstant: 300).isActive = true
         stackView.heightAnchor.constraint(equalToConstant: 300).isActive = true
         
-        stackView.layer.cornerRadius = 25
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.spacing = 10
