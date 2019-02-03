@@ -125,7 +125,7 @@ class ViewController: UIViewController {
             self.scrollView.isEnabled = true
             self.view.backgroundColor = .lightGray
             self.scrollView.value = false
-            self.title = "Swipe to Unlock"
+            self.title = "Lock"
         }
     }
     

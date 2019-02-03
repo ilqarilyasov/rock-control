@@ -15,12 +15,22 @@ class LockControl: UIControl {
 
     var value: Bool?
     var scrollingBallView = UIView()
-    var scrollingBallFirstXPoint: CGFloat! {
+    
+    
+    // MARK: - ScrollingBall positions
+    
+    var unlockBorder: CGFloat {
+        return bounds.maxX * 0.8
+    }
+    
+    var scrollingBallFirstXPoint: CGFloat {
         return 10.0 + (scrollingBallView.bounds.width / 2)
     }
-    var scrollingBallLastXPoint: CGFloat! {
+    
+    var scrollingBallLastXPoint: CGFloat {
         return 300.0 - 10.0 - (scrollingBallView.bounds.width / 2)
     }
+    
     
     // MARK: - Touch handlers
     
@@ -70,29 +80,28 @@ class LockControl: UIControl {
     // MARK: - Update views position
     
     private func moveScrollingBall(to touchPoint: CGPoint, bound: CGRect) {
-        
-        if touchPoint.x <= (self.scrollingBallView.bounds.width / 2) {
+        if touchPoint.x <= scrollingBallView.bounds.width {
             self.layoutIfNeeded()
             UIView.animate(withDuration: 0.5) {
-                self.scrollingBallView.center.x = touchPoint.x + (self.scrollingBallView.bounds.width / 2)
+                self.scrollingBallView.center.x = self.scrollingBallFirstXPoint - 5
             }
-        } else if touchPoint.x >= (bound.maxX * 0.8) {
+        } else if touchPoint.x >= (bounds.maxX - (self.scrollingBallView.bounds.width / 2)) {
             self.layoutIfNeeded()
             UIView.animate(withDuration: 0.5) {
-                self.scrollingBallView.center.x = touchPoint.x - (self.scrollingBallView.bounds.width / 2)
+                self.scrollingBallView.center.x = self.scrollingBallLastXPoint + 5
             }
         } else {
             self.layoutIfNeeded()
             UIView.animate(withDuration: 0.5) {
-                self.scrollingBallView.center.x = touchPoint.x  - (self.scrollingBallView.bounds.width / 2)
+                self.scrollingBallView.center.x = touchPoint.x
             }
         }
-        value = scrollingBallView.center.x >= (bound.maxX * 0.8) ? true : false
+        value = scrollingBallView.center.x >= unlockBorder ? true : false
     }
     
     private func moveScrollingBallWhenTouchEnds(to touchPoint: CGPoint, bound: CGRect) {
         
-        if scrollingBallView.center.x >= (bound.maxX * 0.8) {
+        if scrollingBallView.center.x >= unlockBorder {
             self.layoutIfNeeded()
             UIView.animate(withDuration: 0.7) {
                 self.scrollingBallView.center.x = self.scrollingBallLastXPoint
@@ -104,6 +113,6 @@ class LockControl: UIControl {
             }
         }
         
-        value = scrollingBallView.center.x >= (bound.maxX * 0.8) ? true : false
+        value = scrollingBallView.center.x >= unlockBorder ? true : false
     }
 }
