@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+@IBDesignable
 class ViewController: UIViewController {
     
     
@@ -18,6 +20,7 @@ class ViewController: UIViewController {
     var lockImageView: UIImageView!
     var scrollView: LockControl!
     var scrollingBallView: UIView!
+    @IBOutlet weak var resetButton: UIBarButtonItem!
     
     
     // MARK: - Lifecycle functions
@@ -30,15 +33,23 @@ class ViewController: UIViewController {
         drawLockImageView()
         drawScrollView()
         drawScrollingBallView()
+        resetButton.isEnabled = false
+        view.backgroundColor = .lightGray
     }
 
     
     // MARK: - Bar button action
 
     @IBAction func resetTapped(_ sender: Any) {
-        
-        
-        
+        self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 0.5) {
+            self.lockImageView.image = UIImage(named: "lock")
+            self.scrollingBallView.frame.origin.x = 10
+            self.resetButton.isEnabled = !self.resetButton.isEnabled
+            self.scrollView.isEnabled = true
+            self.view.backgroundColor = .lightGray
+            self.scrollView.value = false
+        }
     }
     
     // MARK: - Drawings
@@ -74,7 +85,7 @@ class ViewController: UIViewController {
     }
     
     private func drawLockImageView() {
-        let lockImageView = UIImageView()
+        lockImageView = UIImageView()
         stackView.addArrangedSubview(lockImageView)
         
         lockImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -94,11 +105,12 @@ class ViewController: UIViewController {
         scrollView.layer.cornerRadius = 25
         scrollView.backgroundColor = .gray
         
-        scrollView.addTarget(self, action: #selector(scrolViewAction), for: .valueChanged)
+        scrollView.addTarget(self, action: #selector(scrollViewAction),
+                             for: [.touchDown, .touchDragInside, .valueChanged])
     }
     
     private func drawScrollingBallView() {
-        scrollingBallView = UIView()
+        scrollingBallView = LockControl()
         scrollView.addSubview(scrollingBallView)
         
         scrollingBallView.translatesAutoresizingMaskIntoConstraints = false
@@ -109,19 +121,25 @@ class ViewController: UIViewController {
         
         scrollingBallView.layer.cornerRadius = 25
         scrollingBallView.backgroundColor = .black
+        scrollView.scrollingBallView = scrollingBallView
     }
     
     // MARK: - Scroll view action
     
-    @objc func scrolViewAction(sender: LockControl) {
-        print("Values changed")
+    @objc func scrollViewAction(sender: LockControl) {
+        guard let value = sender.value, value == true else { return }
+        updateViews(value: value)
+        sender.isEnabled = value ? false : true
     }
     
-    private func updateScrollingBallViewLocation() {
-        
-    }
-    
-    private func toggleLockImageViewImage() {
+    private func updateViews(value: Bool) {
+        let imageName = value ? "unlock" : "lock"
+        self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 0.5) {
+            self.lockImageView.image = UIImage(named: imageName)
+            self.resetButton.isEnabled = value ? true : false
+            self.view.backgroundColor = .white
+        }
         
     }
 }
