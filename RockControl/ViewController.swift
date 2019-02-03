@@ -9,9 +9,7 @@
 import UIKit
 
 
-@IBDesignable
 class ViewController: UIViewController {
-    
     
     // MARK: - Properties
     
@@ -20,7 +18,7 @@ class ViewController: UIViewController {
     var lockImageView: UIImageView!
     var scrollView: LockControl!
     var scrollingBallView: UIView!
-    @IBOutlet weak var resetButton: UIBarButtonItem!
+    var resetButton: UIBarButtonItem!
     
     
     // MARK: - Lifecycle functions
@@ -28,19 +26,19 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        drawResetBarButtonItem()
         drawMainView()
         drawStackView()
         drawLockImageView()
         drawScrollView()
         drawScrollingBallView()
-        resetButton.isEnabled = false
         view.backgroundColor = .lightGray
     }
 
     
     // MARK: - Bar button action
 
-    @IBAction func resetTapped(_ sender: Any) {
+    @objc func resetTapped(_ sender: Any) {
         self.view.layoutIfNeeded()
         UIView.animate(withDuration: 0.5) {
             self.lockImageView.image = UIImage(named: "lock")
@@ -53,6 +51,12 @@ class ViewController: UIViewController {
     }
     
     // MARK: - Drawings
+    
+    private func drawResetBarButtonItem() {
+        resetButton = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(resetTapped))
+        navigationItem.rightBarButtonItem = resetButton
+        resetButton.isEnabled = false
+    }
     
     private func drawMainView() {
         mainView = UIView()

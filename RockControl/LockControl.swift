@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable
+
 class LockControl: UIControl {
     
     // MARK: - Properties
