@@ -33,6 +33,8 @@ class ViewController: UIViewController {
         drawScrollView()
         drawScrollingBallView()
         view.backgroundColor = .lightGray
+        title = "Swipe to Unlock"
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     // MARK: - Drawings
@@ -124,6 +126,7 @@ class ViewController: UIViewController {
             self.scrollView.isEnabled = true
             self.view.backgroundColor = .lightGray
             self.scrollView.value = false
+            self.title = "Swipe to Unlock"
         }
     }
     
@@ -144,8 +147,8 @@ class ViewController: UIViewController {
             self.lockImageView.image = UIImage(named: imageName)
             self.resetButton.isEnabled = value ? true : false
             self.view.backgroundColor = .white
+            self.title = "Unlocked"
         }
-        
     }
 }
 
