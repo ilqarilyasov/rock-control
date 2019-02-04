@@ -13,7 +13,7 @@ class LockControl: UIControl {
     
     // MARK: - Properties
 
-    var value: Bool?
+    var value: Bool? = false
     var scrollingBallView = UIView()
     
     
@@ -65,10 +65,10 @@ class LockControl: UIControl {
         guard let touchPoint = touch?.location(in: self) else { return }
         
         if bounds.contains(touchPoint) {
-            sendActions(for: [.valueChanged, .touchDragInside])
+            sendActions(for: [.valueChanged, .touchUpInside])
             moveScrollingBallWhenTouchEnds(to: touchPoint, bound: bounds)
         } else {
-            sendActions(for: [.touchDragOutside])
+            sendActions(for: [.touchUpOutside])
             moveScrollingBallWhenTouchEnds(to: touchPoint, bound: bounds)
         }
     }
